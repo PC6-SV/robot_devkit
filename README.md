@@ -28,16 +28,9 @@ cd robot_devkit
 ./demo/rdk_install.sh
 ```
 
-### Sourcing
-If this is the only means by which ROS2 is installed (which is most likely the case):
-```bash
-echo "source /opt/ros/dashing/setup.bash" >> ~/.bashrc
-echo ". ~/ros2_ws/install/local_setup.bash" >> ~/.bashrc
-```
-To undo this, locate your system’s shell startup script and remove the appended commands.  
-Otherwise, if multiple versions of ROS2 exist, run this command on every new shell you open to have access to the ROS 2 commands:
+### Running
+To run, go to workshop directory and execute:
 ```bash
 source /opt/ros/$ROS_DISTRO/setup.bash
-cd ~/ros2_ws
-. install/local_setup.bash
+. ./robot_devkit/ros2_ws/install/local_setup.bash
 ```

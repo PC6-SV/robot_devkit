@@ -11,11 +11,13 @@ set -e
 mkdir -p ./ros2_ws/src
 cd ./ros2_ws/src/
 git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-development
-cd ./ros2_ws
+cd ..
 sudo apt-get install python3-rosdep -y
-sudo rosdep init --include-eol-distros
-sudo rosdep update --include-eol-distros
+if [ ! -f "/etc/ros/rosdep/sources.list.d/20-default.list" ]; then
+    sudo rosdep init --include-eol-distros
+fi
 sudo rosdep fix-permissions
+rosdep update --include-eol-distros
 rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
 colcon build
 

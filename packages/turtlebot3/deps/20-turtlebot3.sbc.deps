@@ -25,14 +25,6 @@ install_turtlebot3_ros2_packages()
     libpcl-dev \
     python3-sphinx
 
-  # Install Gazebo9
-  sudo apt install libgazebo11
-  if [[ "$http_proxy" == "" ]];then
-    curl -sSL http://get.gazebosim.org|sed 's,apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D2486D2DD83DB69272AFE98867170598AF24974,apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2486D2DD83DB69272AFE98867170598AF24974,g'|sh
-  else
-    curl -sSL http://get.gazebosim.org|sed 's,apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D2486D2DD83DB69272AFE98867170598AF24974,apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --keyserver-options http-proxy=$http_proxy --recv-keys D2486D2DD83DB69272AFE98867170598AF24974,g'|sh  fi
-  sudo apt-get install -y ros-dashing-gazebo-*
-
   #Install Cartographer
   sudo apt-get install -y ros-dashing-cartographer
 
@@ -40,9 +32,6 @@ install_turtlebot3_ros2_packages()
   sudo apt-get install -y ros-dashing-navigation2
   sudo apt-get install -y ros-dashing-nav2-bringup
 
-  # Install TurtleBot3
-  sudo apt-get install -y ros-dashing-turtlebot3
-  sudo apt-get install -y ros-dashing-turtlebot3-simulations
 }
 
 #
