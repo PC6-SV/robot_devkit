@@ -21,8 +21,9 @@ After build, the RDK is installed on Ubuntu18.04 with below items on development
 
 ## 2. Installation Steps
 ### Packages
+To clone a private repository, you need to generate a PAT(Personal Access Token) on your Github account, and add it to the command below.
 ```bash
-git clone https://github.com/PC6-SV/robot_devkit.git
+git clone https://<pat>@github.com/PC6-SV/robot_devkit.git
 cd robot_devkit
 ./demo/rdk_install.sh
 ```
