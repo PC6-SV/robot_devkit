@@ -21,11 +21,10 @@ After build, the RDK is installed on Ubuntu18.04 with below items on development
 
 ## 2. Installation Steps
 ### Packages
-To clone a private repository, you need to generate a PAT(Personal Access Token) on your Github account, and add it to the command below.
 ```bash
-git clone https://<pat>@github.com/PC6-SV/robot_devkit.git
+git clone https://github.com/PC6-SV/robot_devkit.git
 cd robot_devkit
-./demo/rdk_install.sh
+./rdk_install.sh
 ```
 
 ### Running
@@ -33,4 +32,5 @@ To run, go to workshop directory and execute:
 ```bash
 source /opt/ros/$ROS_DISTRO/setup.bash
 . ./robot_devkit/ros2_ws/install/local_setup.bash
+ros2 launch realsense2_camera rs_d400_and_t265_launch.py
 ```

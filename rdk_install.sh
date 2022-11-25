@@ -20,6 +20,8 @@ sudo rosdep fix-permissions
 rosdep update --include-eol-distros
 rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
 colcon build
+rsync -avh --progress ./realsense2_camera_modified/ ./ros2_ws/install/realsense2_camera/share/realsense2_camera/
+
 
 # Generate tarball and install to remote device
 # ./tools/generate_tarball.sh

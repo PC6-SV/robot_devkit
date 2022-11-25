@@ -65,11 +65,11 @@ check_system_version()
   if [[ -f /etc/lsb-release ]]; then
     system_ver=$( < /etc/lsb-release grep -i "DISTRIB_RELEASE" | cut -d "=" -f2)
     if [[ $system_ver != "18.04" ]] ;then
-      error "Sorry, robot_devkit currently supports olny ubuntu 18.04"
+      error "Sorry, robot_devkit currently supports only ubuntu 18.04"
       exit 1
     fi
   else
-    error "Sorry, robot_devkit currently supports olny ubuntu 18.04"
+    error "Sorry, robot_devkit currently supports only ubuntu 18.04"
     exit 1
   fi
 }
