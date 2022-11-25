@@ -22,3 +22,4 @@ colcon build
 # Generate tarball and install to remote device
 # ./tools/generate_tarball.sh
 # ./rdk.sh deploy --user rdktest --host 10.239.89.4 --file rdk_ws/release/rdk_release_201908051110.tar.gz --proxy http://<ip>:<port>
+#comments for show
