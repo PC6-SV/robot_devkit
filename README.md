@@ -13,20 +13,30 @@ After build, the RDK is installed on Ubuntu18.04 with below items on development
 * ROS2 tutorial for Intel components
 
 ### Hardware Requirements
-* [Intel NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits.html) (CPU: Intel i7-6700HQ @2.60GHz, Mem:16G) or [ADLink Neuron Board](https://neuron.adlinktech.com/en/)
-* Intel Movidius Neural Compute Stick 2
+* x86 CPU
 * Intel RealSense D400 Series, Intel RealSense T265
-
-### Robot support
-* Turtlebot 3 Waffle
 
 ### System Requirements
 * We support Ubuntu Linux Bionic Beaver 18.04 on 64-bit. We not support Mac OS X and Windows.
 
-## 2. How to use
-Please refer to [Intel ROS2 Project Tutorial](https://intel.github.io/robot_devkit_doc/) for more details.
+## 2. Installation Steps
+### Packages
+```bash
+git clone https://github.com/PC6-SV/robot_devkit.git
+cd robot_devkit
+./demo/rdk_install.sh
+```
 
-## 3. Report issue
-If run into any issue of RDK, feel free to report issue in this project.
-
-###### *Any security issue should be reported using process at https://01.org/security*
+### Sourcing
+If this is the only means by which ROS2 is installed (which is most likely the case):
+```bash
+echo "source /opt/ros/dashing/setup.bash" >> ~/.bashrc
+echo ". ~/ros2_ws/install/local_setup.bash" >> ~/.bashrc
+```
+To undo this, locate your system’s shell startup script and remove the appended commands.  
+Otherwise, if multiple versions of ROS2 exist, run this command on every new shell you open to have access to the ROS 2 commands:
+```bash
+source /opt/ros/$ROS_DISTRO/setup.bash
+cd ~/ros2_ws
+. install/local_setup.bash
+```
