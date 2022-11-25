@@ -4,6 +4,7 @@
 #   https://github.com/intel/ros2_openvino_toolkit/blob/devel/doc/BINARY_VERSION_README.md
 
 set -e
+current_path=$(realpath ./)
 
 DEFAULT_INSTALL=true
 
@@ -68,7 +69,7 @@ build_openvino()
   # mobilenet-ssd model
   if [ ! -f /opt/intel/openvino/deployment_tools/tools/model_downloader/object_detection/common/mobilenet-ssd/caffe/mobilenet-ssd.caffemodel ]; then
     cd /opt/intel/openvino/deployment_tools/tools/model_downloader
-    sudo python3 ./downloader.py --num_attempts 3 --name mobilenet-ssd
+    sudo python3 ./downloader.py --num_attempts 3 --name mobilenet-ssd -c $current_path/fixed_list_topologies_openvino.yml
   fi
 
   #FP32 python3 [buffer]
