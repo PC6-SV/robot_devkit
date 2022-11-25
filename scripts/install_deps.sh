@@ -59,7 +59,10 @@ install_package_deps()
 install_deps()
 {
   info "Install dependencies ...\n"
-
+  
+  pip3 install --upgrade pip
+  pip3 install networkx==2.3
+  
   if [[ ! -d "$(get_packages_dir)" ]]; then
     error "$(get_packages_dir) does not exist."
     exit 1
