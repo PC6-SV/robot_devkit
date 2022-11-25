@@ -8,6 +8,16 @@ set -e
 ./rdk.sh build --cmake-args -DCMAKE_BUILD_TYPE=Release
 ./rdk.sh install
 
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src/
+git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-development
+cd ~/ros2_ws
+sudo apt-get install python3-rosdep -y
+sudo rosdep init --include-eol-distros
+sudo rosdep update --include-eol-distros
+sudo rosdep fix-permissions
+rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
+colcon build
 
 # Generate tarball and install to remote device
 # ./tools/generate_tarball.sh
