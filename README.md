@@ -14,7 +14,7 @@ After build, the RDK is installed on Ubuntu18.04 with below items on development
 
 ### Hardware Requirements
 * x86 CPU
-* Intel RealSense D400 Series, Intel RealSense T265
+* Intel RealSense D400 Series
 
 ### System Requirements
 * We support Ubuntu Linux Bionic Beaver 18.04 on 64-bit. We not support Mac OS X and Windows.
