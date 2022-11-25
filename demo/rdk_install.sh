@@ -8,10 +8,10 @@ set -e
 ./rdk.sh build --cmake-args -DCMAKE_BUILD_TYPE=Release
 ./rdk.sh install
 
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src/
+mkdir -p ./ros2_ws/src
+cd ./ros2_ws/src/
 git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-development
-cd ~/ros2_ws
+cd ./ros2_ws
 sudo apt-get install python3-rosdep -y
 sudo rosdep init --include-eol-distros
 sudo rosdep update --include-eol-distros

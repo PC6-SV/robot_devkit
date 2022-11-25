@@ -145,8 +145,8 @@ sync_src()
     sync_src_pkg "$pkg" "${sync_option}"
   done
 
-  yes | cp -rf ~/robot_devkit/scripts/environment_setup.sh ~/robot_devkit/rdk_ws/perception_ws/src/intel/ros2_openvino_toolkit/script/environment_setup.sh
-  yes | cp -rf ~/robot_devkit/scripts/environment_setup_binary.sh ~/robot_devkit/rdk_ws/perception_ws/src/intel/ros2_openvino_toolkit/script/environment_setup.sh
+  yes | cp -rf ./robot_devkit/scripts/environment_setup.sh ./robot_devkit/rdk_ws/perception_ws/src/intel/ros2_openvino_toolkit/script/environment_setup.sh
+  yes | cp -rf ./robot_devkit/scripts/environment_setup_binary.sh ./robot_devkit/rdk_ws/perception_ws/src/intel/ros2_openvino_toolkit/script/environment_setup.sh
 
 }
 
