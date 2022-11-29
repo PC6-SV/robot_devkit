@@ -36,7 +36,7 @@ install_librealsense_binary()
   sudo apt-key add "${CURRENT_DIR}"/20-C8B3A55A6F3EFCDE
 
   # Add the server to the list of repositories
-  sudo sh -c 'echo "deb https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" > /etc/apt/sources.list.d/librealsense.list'
+  sudo sh -c 'echo "deb https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" > /etc/apt/sources.list'
 
   # Install the libraries
   sudo apt-get update && sudo apt-get install -y librealsense2-dkms librealsense2-utils librealsense2-dev

@@ -21,16 +21,19 @@ After build, the RDK is installed on Ubuntu18.04 with below items on development
 
 ## 2. Installation Steps
 ### Packages
+Navigate to an empty directory which you intend to use as a workspace and run:
 ```bash
+mkdir src
+cd src
 git clone https://github.com/PC6-SV/robot_devkit.git
 cd robot_devkit
 ./rdk_install.sh
 ```
 
 ### Running
-To run, go to workshop directory and execute:
+To run, go to workspace directory and execute:
 ```bash
-source /opt/ros/$ROS_DISTRO/setup.bash
-. ./robot_devkit/ros2_ws/install/local_setup.bash
+source /opt/ros/dashing/setup.bash
+. ./install/local_setup.bash
 ros2 launch realsense2_camera rs_d400_and_t265_launch.py
 ```
