@@ -27,6 +27,7 @@ install_turtlebot3_ros2_packages()
 
   #Install Cartographer
   sudo apt-get install -y ros-dashing-cartographer
+  sudo apt-get install -y ros-dashing-cartographer-ros
 
   # Install Navigation2
   sudo apt-get install -y ros-dashing-navigation2

@@ -64,7 +64,7 @@ def generate_launch_description():
             package='tf2_ros',
             node_executable='static_transform_publisher',
             output='screen',
-            arguments=[D435_x, D435_y, D435_z, D435_roll, D435_pitch, D435_yaw, "base_link", rgbd_base_frame_id]
+            arguments=[D435_x, D435_y, D435_z, D435_yaw, D435_roll, D435_pitch, rgbd_base_frame_id, "base_link"]
             )
 
     #cartographer
