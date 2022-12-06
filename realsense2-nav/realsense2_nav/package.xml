@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>realsense2_nav</name>
+  <version>0.0.0</version>
+  <description>Unified Navigation Stack for Realsense Cameras</description>
+  <maintainer email="null@null.com">physics-enthusiast</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>rviz2</depend>
+  <depend>realsense2_camera</depend>
+  <depend>realsense_examples</depend>
+  <depend>nav2_bringup</depend>
+  <depend>cmd_vel_relay</depend>
+
+  <exec_depend>launch_ros</exec_depend>
+  <build_depend>ros_environment</build_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

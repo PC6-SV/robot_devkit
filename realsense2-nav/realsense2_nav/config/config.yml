@@ -1,0 +1,13 @@
+t265_base_frame_id: 't265_link'
+d435_base_frame_id: 'd435_link'
+use_sim_time: false
+resolution: '0.05'
+publish_period_sec: '1.0'
+output_topic: '/rm_ep/cmd_vel'
+D435_x: '0.15'
+D435_y: '0.00'
+D435_z: '0.05'
+D435_roll: '0.00'
+D435_pitch: '0.00'
+D435_yaw: '0.00'
+T265_z: '-0.025'

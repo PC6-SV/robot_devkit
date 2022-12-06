@@ -35,5 +35,8 @@ To run, go to workspace directory and execute:
 ```bash
 source /opt/ros/dashing/setup.bash
 . ./install/local_setup.bash
-ros2 launch realsense2_camera rs_d400_and_t265_launch.py
+. ./src/robot_devkit/ros2_ws/install/local_setup.bash
+. ./src/robot_devkit/rdk_ws/perception_ws/install/local_setup.bash
+export ROS_DOMAIN_ID=120
+ros2 launch realsense2_nav autonomy_launch.py
 ```

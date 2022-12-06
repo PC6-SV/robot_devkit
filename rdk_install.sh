@@ -10,7 +10,7 @@ set -e
 
 mkdir -p ./ros2_ws/src
 cd ./ros2_ws/src/
-git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-development
+git clone https://github.com/PC6-SV/realsense-ros.git
 cd ..
 sudo apt-get install python3-rosdep -y
 if [ ! -f "/etc/ros/rosdep/sources.list.d/20-default.list" ]; then
@@ -24,8 +24,8 @@ cd ..
 cd ..
 cd ..
 source /opt/ros/dashing/setup.bash
-rosdep install -i --from-path src/robot_devkit/realsense2-ros2-vslam --rosdistro dashing --skip-keys=librealsense2 -y
-colcon build --base-paths ./src/robot_devkit/realsense2-ros2-vslam
+rosdep install -i --from-path src/robot_devkit/realsense2-nav --rosdistro dashing --skip-keys=librealsense2 -y
+colcon build --base-paths ./src/robot_devkit/realsense2-nav
 
 # Generate tarball and install to remote device
 # ./tools/generate_tarball.sh
