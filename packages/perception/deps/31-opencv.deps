@@ -16,8 +16,6 @@ install_opencv_binary()
 
 install_opencv_deps()
 {
-  sudo apt-get update
-
   # compiler
   sudo apt-get install -y build-essential
 
