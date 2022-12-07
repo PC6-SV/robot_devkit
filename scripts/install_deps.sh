@@ -59,7 +59,8 @@ install_package_deps()
 install_deps()
 {
   info "Install dependencies ...\n"
-  
+  sudo apt-get install -y python3-pip
+  sudo apt-get install -y software-properties-common
   pip3 install --upgrade pip
   pip3 install networkx==2.3
   
