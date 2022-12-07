@@ -8,6 +8,11 @@ current_path=$(realpath ./)
 
 DEFAULT_INSTALL=true
 
+isDocker(){
+    local cgroup=/proc/1/cgroup
+    test -f $cgroup && [[ "$(<$cgroup)" = *:cpuset:/docker/* ]]
+}
+
 #
 # build openvino binary
 #
@@ -157,9 +162,14 @@ SUBSYSTEM=="usb", ATTRS{idProduct}=="2485", ATTRS{idVendor}=="03e7", GROUP="user
 SUBSYSTEM=="usb", ATTRS{idProduct}=="f63b", ATTRS{idVendor}=="03e7", GROUP="users", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
 EOF'
 
-  sudo udevadm control --reload-rules
-  sudo udevadm trigger
-  sudo ldconfig
+  if isDocker
+  then
+    echo "Docker container detected, udev rules will not be set up. Neural Compute Stick will not work in containers."
+  else
+      sudo udevadm control --reload-rules
+      sudo udevadm trigger
+      sudo ldconfig
+  fi
 }
 
 install_openvino_deps()
@@ -170,9 +180,14 @@ install_openvino_deps()
     build-essential cmake libusb-1.0-0-dev libdrm-dev
 
   sudo -E apt-get install -y libpng-dev
-  sudo udevadm control --reload-rules
-  sudo udevadm trigger
-  sudo ldconfig
+  if isDocker
+  then
+    echo "Docker container detected, udev rules will not be set up. Neural Compute Stick will not work in containers."
+  else
+      sudo udevadm control --reload-rules
+      sudo udevadm trigger
+      sudo ldconfig
+  fi
 }
 
 release_package()
