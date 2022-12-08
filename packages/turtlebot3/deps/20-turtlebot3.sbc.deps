@@ -7,6 +7,11 @@ DEFAULT_INSTALL=true
 
 CURRENT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 
+isDocker(){
+    local cgroup=/proc/1/cgroup
+    test -f $cgroup && [[ "$(<$cgroup)" = *:cpuset:/docker/* ]]
+}
+
 #
 # Install TurtleBot3 ROS 2 Packages
 #
@@ -53,8 +58,13 @@ install_udev_rules()
 
 install_turtlebot3_deps()
 {
-  sudo udevadm control --reload-rules
-  sudo udevadm trigger
+  if isDocker
+  then
+    echo "Docker container detected, udev rules will not be set up. Turtlebot3 will not work in containers."
+  else
+      sudo udevadm control --reload-rules
+      sudo udevadm trigger
+  fi
 }
 
 release_package()
