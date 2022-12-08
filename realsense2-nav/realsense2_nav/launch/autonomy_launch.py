@@ -53,7 +53,9 @@ def generate_launch_description():
         'enable_infra1': 'true',
         'enable_infra2': 'true',
         'pointcloud.enable': 'true',
-        'pointcloud.dense': 'true'}
+        'pointcloud.dense': 'true',
+        'depth_topic': '/d435/camera/depth/image_rect_raw',
+        'depth_camera_info_topic': '/d435/camera/depth/camera_info'}
 
     realsense_prefix = get_package_share_directory('realsense2_camera')
     cartographer_prefix = get_package_share_directory('realsense_examples')
