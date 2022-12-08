@@ -54,6 +54,7 @@ build_openvino()
     # pip timeout issue when run install_prerequesites.sh command
     cd /opt/intel/openvino/deployment_tools/model_optimizer/
     sudo apt-get -y install python3-pip
+    sudo sed -i 's/tensorflow>=1.2.0/tensorflow>=1.2.0, <=1.15.0/g' requirements.txt
     sudo python3 -m pip --default-timeout=600 install -r requirements.txt
     cd /opt/intel/openvino/deployment_tools/model_optimizer/install_prerequisites
     sudo ./install_prerequisites.sh
