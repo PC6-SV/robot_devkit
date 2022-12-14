@@ -37,78 +37,59 @@ def generate_launch_description():
         T265_z = params['T265_z']
 
     t265_static_parameters = {
-        'camera_name': 'T265',
+        'camera_name': 't265',
         'device_type': 't265',
         'base_frame_id': t265_base_frame_id,
         'enable_fisheye1': 'true',
         'enable_fisheye2': 'true',
         'enable_accel': 'true',
         'enable_gyro': 'true',
-        'enanle_pose': 'true'}
+        'enanle_pose': 'true',
+        'unite_imu_method': '2',
+        'tf_publish_rate': '60.0'}
 
     d435_static_parameters = {
-        'camera_name': 'D435', 
+        'camera_name': 'd435', 
         'device_type': 'd4.',
         'base_frame_id': rgbd_base_frame_id,
+        'enable_color': 'true',
+        'enable_depth': 'true',
         'enable_infra1': 'true',
         'enable_infra2': 'true',
         'pointcloud.enable': 'true',
         'pointcloud.dense': 'true',
+        'enable_accel': 'false',
+        'enable_gyro': 'false',
         'depth_topic': '/d435/camera/depth/image_rect_raw',
-        'depth_camera_info_topic': '/d435/camera/depth/camera_info'}
+        'depth_camera_info_topic': '/d435/camera/depth/camera_info',
+        'tf_publish_rate': '60.0'}
 
     realsense_prefix = get_package_share_directory('realsense2_camera')
     cartographer_prefix = get_package_share_directory('realsense_examples')
     nav_prefix = get_package_share_directory('nav2_bringup')
 
-    #nav2
-    tf_node5= Node(
-            package='tf2_ros',
-            node_executable='static_transform_publisher',
-            output='screen',
-            arguments=[D435_x, D435_y, D435_z, D435_yaw, D435_roll, D435_pitch, rgbd_base_frame_id, "base_link"]
-            )
-
     #cartographer
-    tf_node1= Node(
-            package='tf2_ros',
-            node_executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', "T265_pose_frame", t265_base_frame_id]
-            )
-    
-    #cartographer
-    tf_node2= Node(
+    t265_to_d435_tf_node= Node(
             package='tf2_ros',
             node_executable='static_transform_publisher',
             output='screen',
             arguments=['0', '0', '0.03', '0', '0', '0', t265_base_frame_id, rgbd_base_frame_id]
             )
     
-    #cartographer
-    tf_node3= Node(
-            package='tf2_ros',
-            node_executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0', '1.57079633', '3.14', '1.57079633', rgbd_base_frame_id, "D435_depth_optical_frame"]
-            )
-
-    #cartographer
-    tf_node4= Node(
-            package='tf2_ros',
-            node_executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', t265_base_frame_id, "camera_pose_optical_frame"]
-            )
-
-
     #nav2
-    tf_node6= Node(
+    base_link_tf_node= Node(
             package='tf2_ros',
             node_executable='static_transform_publisher',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', "odom_frame", "odom"]
-            ) 
+            arguments=[D435_x, D435_y, D435_z, D435_yaw, D435_roll, D435_pitch, rgbd_base_frame_id, "base_link"]
+            )
+
+    imu_tf_node= Node(
+            package='tf2_ros',
+            node_executable='static_transform_publisher',
+            output='screen',
+            arguments=['0', '0', '0', '0', '0', '0', 't265_gyro_optical_frame', 't265_imu_optical_frame']
+            )
 
     return LaunchDescription(
         [
@@ -151,7 +132,5 @@ def generate_launch_description():
                 package='cmd_vel_relay',
                 node_executable='relay',
                 node_name='relay',
-                parameters=[{'input_topic': "cmd_vel",'output_topic': output_topic}]),
-
-        tf_node1,tf_node2,tf_node3,tf_node4,tf_node5,tf_node6
+                parameters=[{'input_topic': "cmd_vel",'output_topic': output_topic}]), t265_to_d435_tf_node,base_link_tf_node,imu_tf_node
     ])
