@@ -10,7 +10,7 @@ sys.path.append(str(pathlib.Path(__file__).parent.absolute()))
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription,DeclareLaunchArgument,GroupAction
+from launch.actions import IncludeLaunchDescription,DeclareLaunchArgument,GroupAction,TimerAction
 from launch_ros.actions import Node
 from launch.substitutions import ThisLaunchFileDir,LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -42,11 +42,8 @@ def generate_launch_description():
         'base_frame_id': t265_base_frame_id,
         'enable_fisheye1': 'true',
         'enable_fisheye2': 'true',
-        'enable_accel': 'true',
-        'enable_gyro': 'true',
         'enanle_pose': 'true',
-        'unite_imu_method': '2',
-        'tf_publish_rate': '60.0'}
+        'tf_publish_rate': '60.0',}
 
     d435_static_parameters = {
         'camera_name': 'd435', 
@@ -58,17 +55,18 @@ def generate_launch_description():
         'enable_infra2': 'true',
         'pointcloud.enable': 'true',
         'pointcloud.dense': 'true',
-        'enable_accel': 'false',
-        'enable_gyro': 'false',
+        'enable_accel': 'true',
+        'enable_gyro': 'true',
+        'unite_imu_method': '2',
         'depth_topic': '/d435/camera/depth/image_rect_raw',
         'depth_camera_info_topic': '/d435/camera/depth/camera_info',
-        'tf_publish_rate': '60.0'}
+        'tf_publish_rate': '60.0',
+        'align_depth.enable': 'true'}
 
     realsense_prefix = get_package_share_directory('realsense2_camera')
     cartographer_prefix = get_package_share_directory('realsense_examples')
     nav_prefix = get_package_share_directory('nav2_bringup')
 
-    #cartographer
     t265_to_d435_tf_node= Node(
             package='tf2_ros',
             node_executable='static_transform_publisher',
@@ -82,13 +80,6 @@ def generate_launch_description():
             node_executable='static_transform_publisher',
             output='screen',
             arguments=[D435_x, D435_y, D435_z, D435_yaw, D435_roll, D435_pitch, rgbd_base_frame_id, "base_link"]
-            )
-
-    imu_tf_node= Node(
-            package='tf2_ros',
-            node_executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', 't265_gyro_optical_frame', 't265_imu_optical_frame']
             )
 
     return LaunchDescription(
@@ -107,30 +98,52 @@ def generate_launch_description():
             'nav_configuration_filepath',
             default_value=nav_configuration_filepath,
             description='Name of yaml file for navigation2'),
+        
+        t265_to_d435_tf_node,base_link_tf_node,
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([realsense_prefix, '/launch/rs_launch.py']),
-            launch_arguments=t265_static_parameters.items()
+        TimerAction(
+            period=0.0,
+            actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([realsense_prefix, '/launch/rs_launch.py']),
+                launch_arguments=t265_static_parameters.items()
+            )
+            ]
         ),
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([realsense_prefix, '/launch/rs_launch.py']),
-            launch_arguments=d435_static_parameters.items()
+        TimerAction(
+            period=5.0,
+            actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([realsense_prefix, '/launch/rs_launch.py']),
+                launch_arguments=d435_static_parameters.items()
+            )
+            ]
         ),
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([cartographer_prefix, '/launch/rs_cartographer.launch.py']),
-            launch_arguments={"cartographer_config_dir":config_dir,"configuration_basename":cartographer_configuration_basename,"resolution":resolution,"publish_period_sec":publish_period_sec}.items()
+        TimerAction(
+            period=10.0,
+            actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([cartographer_prefix, '/launch/rs_cartographer.launch.py']),
+                launch_arguments={"cartographer_config_dir":config_dir,"configuration_basename":cartographer_configuration_basename,"resolution":resolution,"publish_period_sec":publish_period_sec}.items()
+            )
+            ]
         ),
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([nav_prefix, '/launch/nav2_navigation_launch.py']),
-            launch_arguments={"params":nav_configuration_filepath}.items()
+        TimerAction(
+            period=15.0,
+            actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([nav_prefix, '/launch/nav2_navigation_launch.py']),
+                launch_arguments={"params":nav_configuration_filepath}.items()
+            )
+            ]
         ),
 
         Node(
                 package='cmd_vel_relay',
                 node_executable='relay',
                 node_name='relay',
-                parameters=[{'input_topic': "cmd_vel",'output_topic': output_topic}]), t265_to_d435_tf_node,base_link_tf_node,imu_tf_node
+                parameters=[{'input_topic': "cmd_vel",'output_topic': output_topic}])
     ])
