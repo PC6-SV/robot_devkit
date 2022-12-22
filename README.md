@@ -38,6 +38,7 @@ source /opt/ros/dashing/setup.bash
 . ./install/local_setup.bash
 . ./src/robot_devkit/ros2_ws/install/local_setup.bash
 . ./src/robot_devkit/rdk_ws/perception_ws/install/local_setup.bash
-export ROS_DOMAIN_ID=120
+export ROS_DOMAIN_ID=120      # Anything that communicates to this should have the same ID*
 ros2 launch realsense2_nav autonomy_launch.py
 ```
+#*e.g. robomaster dockerfile 
