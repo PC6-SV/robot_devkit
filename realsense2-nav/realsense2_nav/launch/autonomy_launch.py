@@ -15,6 +15,9 @@ from launch_ros.actions import Node
 from launch.substitutions import ThisLaunchFileDir,LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
+def negative_str(string):
+    return str(-float(string))
+
 def generate_launch_description():
     config_dir = LaunchConfiguration('config_dir', default=os.path.join(get_package_share_directory('realsense2_nav'), 'config'))
     cartographer_configuration_basename = LaunchConfiguration('cartographer_configuration_basename', default='rs_cartographer.lua')
@@ -28,13 +31,13 @@ def generate_launch_description():
         resolution = params['resolution']
         publish_period_sec = params['publish_period_sec']
         output_topic = params['output_topic']
-        D435_x = params['D435_x']
-        D435_y = params['D435_y']
-        D435_z = params['D435_z']
-        D435_roll = params['D435_roll']
-        D435_pitch = params['D435_pitch']
-        D435_yaw = params['D435_yaw']
-        T265_z = params['T265_z']
+        negative_D435_x = negative_str(params['D435_x'])
+        negative_D435_y = negative_str(params['D435_y'])
+        negative_D435_z = negative_str(params['D435_z'])
+        negative_D435_roll = negative_str(params['D435_roll'])
+        negative_D435_pitch = negative_str(params['D435_pitch'])
+        negative_D435_yaw = negative_str(params['D435_yaw'])
+        timeout = params['timeout']
 
     t265_static_parameters = {
         'camera_name': 't265',
@@ -42,8 +45,8 @@ def generate_launch_description():
         'base_frame_id': t265_base_frame_id,
         'enable_fisheye1': 'true',
         'enable_fisheye2': 'true',
-        'enanle_pose': 'true',
-        'tf_publish_rate': '60.0',}
+        'enable_pose': 'true',
+        'tf_publish_rate': '100.0',}
 
     d435_static_parameters = {
         'camera_name': 'd435', 
@@ -60,7 +63,7 @@ def generate_launch_description():
         'unite_imu_method': '2',
         'depth_topic': '/d435/camera/depth/image_rect_raw',
         'depth_camera_info_topic': '/d435/camera/depth/camera_info',
-        'tf_publish_rate': '60.0',
+        'tf_publish_rate': '100.0',
         'align_depth.enable': 'true'}
 
     realsense_prefix = get_package_share_directory('realsense2_camera')
@@ -74,12 +77,27 @@ def generate_launch_description():
             arguments=['0', '0', '0.03', '0', '0', '0', t265_base_frame_id, rgbd_base_frame_id]
             )
     
-    #nav2
     base_link_tf_node= Node(
             package='tf2_ros',
             node_executable='static_transform_publisher',
             output='screen',
-            arguments=[D435_x, D435_y, D435_z, D435_yaw, D435_roll, D435_pitch, rgbd_base_frame_id, "base_link"]
+            arguments=[negative_D435_x, negative_D435_y, negative_D435_z, negative_D435_yaw, negative_D435_pitch, negative_D435_roll, rgbd_base_frame_id, "base_link"]
+            )
+
+    #conversion from realsense y-vertical convention to cartographer z-vertical convention
+    tracking_frame_tf_node= Node(
+            package='tf2_ros',
+            node_executable='static_transform_publisher',
+            output='screen',
+            arguments=['0', '0', '0', '1.57079633', '-1.57079633', '0', 'd435_imu_optical_frame', "tracking_frame"]
+            )
+
+    #realsense ros hardcodes its odom frame as "odom_frame", but navigation2 hardcodes it as "odom". connect the 2 via tf
+    odom_frame_tf_node= Node(
+            package='tf2_ros',
+            node_executable='static_transform_publisher',
+            output='screen',
+            arguments=['0', '0', '0', '0', '0', '0', 'odom_frame', "odom"]
             )
 
     return LaunchDescription(
@@ -99,7 +117,7 @@ def generate_launch_description():
             default_value=nav_configuration_filepath,
             description='Name of yaml file for navigation2'),
         
-        t265_to_d435_tf_node,base_link_tf_node,
+        t265_to_d435_tf_node,base_link_tf_node,tracking_frame_tf_node,odom_frame_tf_node,
 
         TimerAction(
             period=0.0,
@@ -145,5 +163,5 @@ def generate_launch_description():
                 package='cmd_vel_relay',
                 node_executable='relay',
                 node_name='relay',
-                parameters=[{'input_topic': "cmd_vel",'output_topic': output_topic}])
+                parameters=[{'input_topic': "cmd_vel",'output_topic': output_topic, 'timeout': timeout}])
     ])
